@@ -303,6 +303,108 @@
         .contact-form button:hover {
             background: #27ae60;
         }
+
+        /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
+        nav {
+            padding: 15px 20px;
+            top: 10px;
+            width: 95%;
+        }
+
+        .logo span {
+            font-size: 20px;
+            margin-left: 8px;
+        }
+
+        .nav-links {
+            display: none; /* Hide desktop navigation */
+        }
+
+        .dark-mode-toggle label {
+            display: none; /* Hide "Dark Mode" text */
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: block;
+            font-size: 24px;
+            cursor: pointer;
+            color: #2ecc71;
+        }
+
+        .nav-links.mobile-active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 20px;
+            text-align: center;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            flex-direction: column;
+            padding: 120px 20px 50px;
+            height: auto;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 100%;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            margin-top: 30px;
+        }
+
+        section {
+            padding: 30px 20px;
+            margin: 30px auto;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+        }
+
+        .about-grid,
+        .contact-wrapper,
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .contact-form button {
+            width: 100%;
+        }
+
+        .warranty-form .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-content h1 {
+            font-size: 1.8em;
+        }
+        
+        .cta-button {
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+        }
+    }
     </style>
 </head>
 <body>
@@ -409,6 +511,26 @@
         const darkModeSwitch = document.getElementById('dark-mode-switch');
         darkModeSwitch.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode', darkModeSwitch.checked);
+        });
+
+
+            // Mobile Menu Toggle
+        const menuToggle = document.createElement('div');
+        menuToggle.className = 'menu-toggle';
+        menuToggle.innerHTML = '☰';
+        document.querySelector('nav').appendChild(menuToggle);
+
+        const navLinks = document.querySelector('.nav-links');
+    
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('mobile-active');
+            }
         });
     </script>
 </body>
