@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendOptima - Smart Vending Solutions</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+           /* Modal Styles */
+           .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 700px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 400px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff5e57;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-close:hover {
+            background: #ff3b30;
+        }
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #121212;
+            color: #f9f9f9;
+        }
+
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px 30px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        body.dark-mode nav {
+            background: #1e1e1e;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            color: #2ecc71;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        body.dark-mode .nav-links a {
+            color: #f9f9f9;
+        }
+
+        .nav-links a:hover {
+            color: #2ecc71;
+        }
+
+        .cta-button {
+            background: #2ecc71;
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+        }
+
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .dark-mode-toggle input {
+            width: 40px;
+            height: 20px;
+            appearance: none;
+            background: #ddd;
+            border-radius: 20px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dark-mode-toggle input:checked {
+            background: #2ecc71;
+        }
+
+        .dark-mode-toggle input::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .dark-mode-toggle input:checked::before {
+            transform: translateX(20px);
+        }
+
+        section {
+            margin: 50px auto;
+            padding: 50px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s, box-shadow 0.3s;
+            max-width: 1200px;
+        }
+
+        body.dark-mode section {
+            background: #1e1e1e;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 100px;
+            background: linear-gradient(45deg, #f8fff5, #ffffff);
+            transition: background 0.3s;
+            border-radius: 20px;
+        }
+
+        body.dark-mode .hero {
+            background: linear-gradient(45deg, #1e1e1e, #121212);
+        }
+
+        .hero-content {
+            max-width: 50%;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            line-height: 1.2;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .hero-content h1 {
+            color: #f9f9f9;
+        }
+
+        .hero-content p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .hero-content p {
+            color: #ccc;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.15));
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            text-align: center;
+            transition: color 0.3s;
+        }
+
+        body.dark-mode .section-title {
+            color: #f9f9f9;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-grid img {
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .contact-form button {
+            background: #2ecc71;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .contact-form button:hover {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+     <!-- Video Modal -->
+     <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <iframe src="animation.mp4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <img src="logo.png" alt="VendOptima Logo" style="height: 40px; vertical-align: middle;">
+            <span style="margin-left: 10px; font-size: 24px; font-weight: 700; color: #2ecc71;">VENDOPTIMA</span>
+        </div>
+        <div class="nav-links">
+            <a href="#home">HOME</a>
+            <a href="#about">ABOUT</a>
+            <a href="#contact">CONTACT</a>
+            <a href="#warranty">WARRANTY</a>
+        </div>
+        <div class="dark-mode-toggle">
+            <label for="dark-mode-switch">Dark Mode</label>
+            <input type="checkbox" id="dark-mode-switch">
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content" data-aos="fade-up">
+            <h1>Revolutionizing Vending<br>With AI Automation</h1>
+            <p>IoT-Powered Inventory Solutions <br>• Zero Downtime<br>• Sustainable Operations</p>
+            <a href="#about" class="cta-button">LEARN MORE</a>
+        </div>
+        <div class="hero-image" data-aos="fade-left">
+            <img src="vend.jpg" alt="AI Vending Machine">
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="content-section">
+        <div class="section-content" data-aos="fade-up">
+            <h2 class="section-title">About Our Innovation</h2>
+            <div class="about-grid">
+                <div>
+                    <h3>Transforming Vending Machine Management</h3><br>
+                    <p>VendOptima leverages cutting-edge IoT technology and AI-driven logistics to eliminate manual restocking errors and optimize vending operations. Our system reduces downtime by 40% and increases profitability through:</p>
+                   <br> <ul>
+                        <li>Real-time inventory tracking</li>
+                        <li>Predictive restocking algorithms</li>
+                        <li>Autonomous delivery integration</li>
+                        <li>Sustainable waste reduction</li>
+                    </ul>
+                </div>
+                <img src="drone.jpg" alt="Vending Machine">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="content-section">
+        <div class="section-content" data-aos="fade-up">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h3>Contact Details</h3>
+                    <p>📞 +1 (800) 555-OPTIMA<br>
+                    📍 kerala<br>
+                    ✉️ solutions@vendoptima.com</p>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name">
+                    <input type="email" placeholder="Your Email">
+                    <textarea rows="5" placeholder="Your Message"></textarea>
+                    <button type="submit">SEND MESSAGE</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warranty Section -->
+    <section id="warranty" class="content-section">
+        <div class="section-content" data-aos="fade-up">
+            <h2 class="section-title">Warranty Application</h2>
+            <form class="warranty-form">
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <input type="text" placeholder="Machine Model Number" style="padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                    <input type="text" placeholder="Serial Number" style="padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                    <input type="date" placeholder="Purchase Date" style="padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                    <input type="email" placeholder="Your Email" style="padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px;">
+                </div>
+                <textarea rows="4" placeholder="Issue Description" style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; margin-top: 20px;"></textarea>
+                <button type="submit" class="cta-button" style="margin-top: 20px; padding: 15px 30px; font-size: 18px;">SUBMIT CLAIM</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        // Dark mode toggle
+        const darkModeSwitch = document.getElementById('dark-mode-switch');
+        darkModeSwitch.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode', darkModeSwitch.checked);
+        });
+    </script>
+</body>
+</html>
