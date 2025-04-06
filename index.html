@@ -303,6 +303,166 @@
         .contact-form button:hover {
             background: #27ae60;
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            /* Top Navigation Bar */
+            nav {
+                padding: 12px 15px;
+                top: 10px;
+                width: 95%;
+            }
+
+            .logo span {
+                font-size: 18px;
+                margin-left: 6px;
+            }
+
+            .logo img {
+                height: 30px !important;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-links.mobile-active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: #ffffff;
+                padding: 20px;
+                text-align: center;
+                gap: 15px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                border-radius: 0 0 20px 20px;
+            }
+
+            body.dark-mode .nav-links.mobile-active {
+                background: #1e1e1e;
+            }
+
+            .dark-mode-toggle {
+                position: absolute;
+                right: 50px;
+                top: 15px;
+                gap: 5px;
+            }
+
+            .dark-mode-toggle label {
+                display: none;
+            }
+
+            .dark-mode-toggle input {
+                width: 35px;
+                height: 18px;
+            }
+
+            .dark-mode-toggle input::before {
+                width: 14px;
+                height: 14px;
+            }
+
+            /* Hamburger Menu */
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                right: 15px;
+                top: 14px;
+                font-size: 24px;
+                cursor: pointer;
+                color: #2ecc71;
+            }
+
+            /* Hero Section */
+            .hero {
+                flex-direction: column;
+                padding: 120px 20px 50px;
+                height: auto;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2em;
+            }
+
+            .hero-image img {
+                max-width: 100%;
+                margin-top: 30px;
+            }
+
+            /* Sections */
+            section {
+                padding: 30px 20px;
+                margin: 30px auto;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+
+            /* Grid Layouts */
+            .about-grid,
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            /* Contact Form */
+            .contact-form button {
+                width: 100%;
+            }
+
+            /* Warranty Form */
+            .warranty-form .form-grid {
+                display: grid !important;
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .warranty-form input,
+            .warranty-form textarea {
+                width: 100% !important;
+                padding: 12px !important;
+                font-size: 14px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .warranty-form button.cta-button {
+                width: 100%;
+                padding: 12px 20px !important;
+                font-size: 16px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo span {
+                font-size: 16px;
+            }
+
+            .hero-content h1 {
+                font-size: 1.8em;
+            }
+            
+            .cta-button {
+                display: block;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .warranty-form .form-grid {
+                gap: 10px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -410,6 +570,25 @@
         const darkModeSwitch = document.getElementById('dark-mode-switch');
         darkModeSwitch.addEventListener('change', () => {
             document.body.classList.toggle('dark-mode', darkModeSwitch.checked);
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.createElement('div');
+        menuToggle.className = 'menu-toggle';
+        menuToggle.innerHTML = '☰';
+        document.querySelector('nav').appendChild(menuToggle);
+
+        const navLinks = document.querySelector('.nav-links');
+    
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('mobile-active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                navLinks.classList.remove('mobile-active');
+            }
         });
     </script>
 </body>
